@@ -254,7 +254,34 @@ middleware.ts
 
 ---
 
-## 13. Security notes
+## 13. Design system
+
+The UI follows a "security console" direction rather than a generic SaaS look —
+appropriate for a tool whose job is reading precise system state (key status, device
+bindings, logs), not selling a product.
+
+- **Color** — graphite-blue base (`--background`, `--card`), not pure black or violet, with a
+  brass/gold accent (`--primary`, `#C99A4B`-ish) as the one interactive color — the material
+  cue for a physical *key*. Status is shown with desaturated "LED" signal colors
+  (`text-signal-success` / `-warning` / `-danger` / `-idle` in `tailwind.config.ts`) rather than
+  bright candy colors.
+- **Type** — IBM Plex Sans for UI chrome (headings, labels, buttons) and IBM Plex Mono
+  (`font-data` utility class) for anything that's actually data: license keys, device IDs, IPs,
+  timestamps, log rows. This is functional, not decorative — monospace makes it easier to
+  scan characters that matter (a typo in a key or device ID is a real bug).
+- **Layout** — hairline 1px borders instead of drop shadows, a small consistent border radius
+  (`--radius: 0.375rem`), status shown as a dot + label (`Badge` in `components/ui/badge.tsx`)
+  instead of filled pill chips, and the dashboard overview uses a single bordered "readout
+  strip" (divided cells, mono numerals) instead of a grid of identical icon cards.
+- **Motion** — deliberately minimal. The only animated element is the pulsing "System nominal"
+  dot in the navbar (`.signal-dot--live` in `globals.css`, respects `prefers-reduced-motion`).
+  Nothing else animates on hover/load, on purpose.
+
+If you add new UI, reuse the existing tokens (`hsl(var(--signal-success))`, etc. — see
+`app/globals.css`) rather than introducing new ad hoc colors, and reach for `font-data` any
+time you're rendering a key, ID, IP, or timestamp.
+
+## 14. Security notes
 
 - Passwords are hashed with bcrypt (cost factor 12) — plaintext is never stored or logged.
 - Sessions are opaque random tokens (32 bytes, CSPRNG). Only a SHA-256 hash of the token is
@@ -290,7 +317,7 @@ drop-in change.
 
 ---
 
-## 14. Testing
+## 15. Testing
 
 ```bash
 npm test
@@ -309,7 +336,7 @@ Included:
 
 ---
 
-## 15. Notes
+## 16. Notes
 
 - Dummy/placeholder data is used only for empty-state UI — every dashboard number, table
   row, and log entry comes from the real database.

@@ -47,11 +47,11 @@ function LoginForm() {
     <div className="min-h-screen flex items-center justify-center p-4">
       <div className="w-full max-w-sm">
         <div className="flex flex-col items-center mb-6">
-          <div className="h-12 w-12 rounded-xl bg-primary/15 border border-primary/30 flex items-center justify-center mb-3">
-            <ShieldCheck className="h-6 w-6 text-primary" />
+          <div className="h-11 w-11 rounded-sm bg-primary/10 border border-primary/40 flex items-center justify-center mb-3">
+            <ShieldCheck className="h-5 w-5 text-primary" />
           </div>
           <h1 className="text-lg font-semibold">Key Management Platform</h1>
-          <p className="text-sm text-muted-foreground">Sign in to your admin account</p>
+          <p className="text-sm text-muted-foreground font-data">console access — sign in</p>
         </div>
 
         <Card>

@@ -39,8 +39,19 @@ const config: Config = {
           DEFAULT: 'hsl(var(--card))',
           foreground: 'hsl(var(--card-foreground))',
         },
-        success: '#22c55e',
-        warning: '#f59e0b',
+        signal: {
+          success: 'hsl(var(--signal-success))',
+          warning: 'hsl(var(--signal-warning))',
+          danger: 'hsl(var(--signal-danger))',
+          idle: 'hsl(var(--signal-idle))',
+        },
+        // kept for backward compatibility with earlier components
+        success: 'hsl(var(--signal-success))',
+        warning: 'hsl(var(--signal-warning))',
+      },
+      fontFamily: {
+        sans: ['var(--font-sans)', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        mono: ['var(--font-mono)', 'ui-monospace', 'SFMono-Regular', 'monospace'],
       },
       borderRadius: {
         lg: 'var(--radius)',

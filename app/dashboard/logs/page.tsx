@@ -70,7 +70,7 @@ export default function LogsPage() {
                     <td className="p-3 whitespace-nowrap text-muted-foreground">{formatDate(log.createdAt)}</td>
                     <td className="p-3 font-medium capitalize">{log.action.replace(/_/g, ' ')}</td>
                     <td className="p-3 text-muted-foreground">{log.userEmail ?? '—'}</td>
-                    <td className="p-3 text-muted-foreground font-mono text-xs">{log.ip ?? '—'}</td>
+                    <td className="p-3 text-muted-foreground font-data text-xs">{log.ip ?? '—'}</td>
                     <td className="p-3 text-muted-foreground text-xs max-w-[220px] truncate">{log.userAgent ?? '—'}</td>
                   </tr>
                 ))}

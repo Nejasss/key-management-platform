@@ -193,7 +193,7 @@ export default function GenerateKeyPage() {
                 <tbody>
                   {generated.map((g) => (
                     <tr key={g.id} className="border-b border-border last:border-0">
-                      <td className="p-2 font-mono text-xs">{g.key}</td>
+                      <td className="p-2 font-data text-xs">{g.key}</td>
                       <td className="p-2 text-muted-foreground text-xs">{g.status}</td>
                     </tr>
                   ))}

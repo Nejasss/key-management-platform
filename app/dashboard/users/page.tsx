@@ -63,15 +63,15 @@ export default function UsersPage() {
                 rows.map((u) => (
                   <tr key={u.id} className="border-b border-border last:border-0 hover:bg-secondary/30">
                     <td className="p-3 font-medium">{u.username}</td>
-                    <td className="p-3 text-muted-foreground">{u.email}</td>
+                    <td className="p-3 text-muted-foreground font-data text-xs">{u.email}</td>
                     <td className="p-3">
                       <Badge status={u.role}>{u.role}</Badge>
                     </td>
                     <td className="p-3">
                       <Badge status={u.isActive ? 'active' : 'revoked'}>{u.isActive ? 'active' : 'disabled'}</Badge>
                     </td>
-                    <td className="p-3 text-muted-foreground whitespace-nowrap">{formatDate(u.createdAt)}</td>
-                    <td className="p-3 text-muted-foreground whitespace-nowrap">{formatDate(u.lastLoginAt)}</td>
+                    <td className="p-3 text-muted-foreground whitespace-nowrap font-data text-xs">{formatDate(u.createdAt)}</td>
+                    <td className="p-3 text-muted-foreground whitespace-nowrap font-data text-xs">{formatDate(u.lastLoginAt)}</td>
                   </tr>
                 ))}
             </tbody>

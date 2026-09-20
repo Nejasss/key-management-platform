@@ -162,7 +162,7 @@ export default function KeysPage() {
               {!loading &&
                 rows.map((row) => (
                   <tr key={row.id} className="border-b border-border last:border-0 hover:bg-secondary/30">
-                    <td className="p-3 font-mono text-xs whitespace-nowrap">
+                    <td className="p-3 font-data text-xs whitespace-nowrap">
                       <button onClick={() => copyKey(row.key)} className="flex items-center gap-1.5 hover:text-primary">
                         {row.key} <Copy className="h-3 w-3" />
                       </button>
@@ -170,8 +170,8 @@ export default function KeysPage() {
                     <td className="p-3">
                       <Badge status={row.status}>{row.status}</Badge>
                     </td>
-                    <td className="p-3 text-muted-foreground whitespace-nowrap">{formatDate(row.createdAt)}</td>
-                    <td className="p-3 text-muted-foreground whitespace-nowrap">{formatDate(row.expiresAt)}</td>
+                    <td className="p-3 text-muted-foreground whitespace-nowrap font-data text-xs">{formatDate(row.createdAt)}</td>
+                    <td className="p-3 text-muted-foreground whitespace-nowrap font-data text-xs">{formatDate(row.expiresAt)}</td>
                     <td className="p-3">
                       <button
                         onClick={() => openDetail(row.id)}
@@ -184,7 +184,7 @@ export default function KeysPage() {
                         {row.deviceCount} / {row.maxDevices === -1 ? '∞' : row.maxDevices}
                       </button>
                     </td>
-                    <td className="p-3 text-muted-foreground whitespace-nowrap">{formatDate(row.lastVerifiedAt)}</td>
+                    <td className="p-3 text-muted-foreground whitespace-nowrap font-data text-xs">{formatDate(row.lastVerifiedAt)}</td>
                     <td className="p-3">
                       <div className="flex items-center justify-end gap-1">
                         <Button variant="ghost" size="icon" title="View devices" onClick={() => openDetail(row.id)}>

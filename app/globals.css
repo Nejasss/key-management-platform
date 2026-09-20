@@ -2,26 +2,47 @@
 @tailwind components;
 @tailwind utilities;
 
+/*
+  Design tokens — "security console" direction.
+  Graphite-blue base (not pure black, not violet) with a brass/gold
+  accent (keys are physical objects — brass is the material cue) and
+  desaturated LED-style signal colors for license status.
+*/
 @layer base {
   :root {
-    --background: 240 10% 4%;
-    --foreground: 0 0% 98%;
-    --card: 240 8% 8%;
-    --card-foreground: 0 0% 98%;
-    --primary: 258 90% 66%;
-    --primary-foreground: 0 0% 100%;
-    --secondary: 240 6% 14%;
-    --secondary-foreground: 0 0% 90%;
-    --muted: 240 6% 14%;
-    --muted-foreground: 240 5% 64%;
-    --accent: 258 90% 66%;
-    --accent-foreground: 0 0% 100%;
-    --destructive: 0 72% 51%;
+    --background: 220 16% 6%;
+    --foreground: 36 18% 92%;
+
+    --card: 220 14% 9%;
+    --card-foreground: 36 18% 92%;
+
+    --primary: 40 52% 56%;
+    --primary-foreground: 220 20% 9%;
+
+    --secondary: 220 12% 13%;
+    --secondary-foreground: 36 10% 85%;
+
+    --muted: 220 12% 13%;
+    --muted-foreground: 220 8% 58%;
+
+    --accent: 40 52% 56%;
+    --accent-foreground: 220 20% 9%;
+
+    --destructive: 356 66% 56%;
     --destructive-foreground: 0 0% 100%;
-    --border: 240 6% 18%;
-    --input: 240 6% 18%;
-    --ring: 258 90% 66%;
-    --radius: 0.75rem;
+
+    --border: 220 12% 17%;
+    --input: 220 12% 17%;
+    --ring: 40 52% 56%;
+    --radius: 0.375rem;
+
+    /* Signal / LED colors — kept separate from the primary scale on
+       purpose, since they mean something specific (license status),
+       not decoration. */
+    --signal-success: 152 42% 47%;
+    --signal-warning: 32 82% 54%;
+    --signal-danger: 356 66% 56%;
+    --signal-idle: 220 8% 46%;
   }
 }
 
@@ -30,9 +51,42 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground;
-    background-image: radial-gradient(circle at 20% -10%, rgba(139, 92, 246, 0.08), transparent 40%),
-      radial-gradient(circle at 90% 10%, rgba(139, 92, 246, 0.05), transparent 40%);
+    @apply bg-background text-foreground font-sans;
+    background-image:
+      linear-gradient(hsl(var(--border) / 0.35) 1px, transparent 1px),
+      linear-gradient(90deg, hsl(var(--border) / 0.35) 1px, transparent 1px);
+    background-size: 44px 44px;
+    background-position: -1px -1px;
+  }
+}
+
+@layer utilities {
+  .font-data {
+    font-family: var(--font-mono);
+    font-feature-settings: 'tnum' 1, 'zero' 1;
+  }
+}
+
+/* A single deliberate motion moment: the "system nominal" status dot. */
+@keyframes signal-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.35; }
+}
+.signal-dot::before {
+  content: '';
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 9999px;
+  background: currentColor;
+}
+.signal-dot--live::before {
+  animation: signal-pulse 2.4s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .signal-dot--live::before {
+    animation: none;
   }
 }
 

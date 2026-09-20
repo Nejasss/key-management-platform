@@ -102,7 +102,7 @@ export function KeyDetailDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle className="font-mono text-sm break-all pr-6">
+          <DialogTitle className="font-data text-sm break-all pr-6">
             {loading || !data ? 'Loading key...' : data.key}
           </DialogTitle>
           <DialogDescription>
@@ -122,7 +122,7 @@ export function KeyDetailDialog({
             <>
               <div className="flex flex-wrap items-center gap-2">
                 <Badge status={data.status}>{data.status}</Badge>
-                <span className="inline-flex items-center gap-1.5 rounded-full border border-border bg-secondary/50 px-2.5 py-0.5 text-xs font-medium">
+                <span className="inline-flex items-center gap-1.5 rounded-sm border border-border bg-secondary/50 px-2.5 py-0.5 text-xs font-medium font-data">
                   <Smartphone className="h-3 w-3" />
                   {slotsLabel} devices used
                 </span>
@@ -147,7 +147,7 @@ export function KeyDetailDialog({
                       <div className="min-w-0 space-y-1.5">
                         <button
                           onClick={() => copyDeviceId(device.deviceId)}
-                          className="flex items-center gap-1.5 font-mono text-xs hover:text-primary break-all text-left"
+                          className="flex items-center gap-1.5 font-data text-xs hover:text-primary break-all text-left"
                           title="Copy device ID"
                         >
                           {device.deviceId}

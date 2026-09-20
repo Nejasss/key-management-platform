@@ -39,11 +39,16 @@ export function Sidebar() {
 
   const content = (
     <div className="flex flex-col h-full">
-      <div className="flex items-center gap-2 px-5 h-16 border-b border-border">
-        <ShieldCheck className="h-5 w-5 text-primary" />
-        <span className="font-semibold text-sm">Key Management</span>
+      <div className="flex items-center gap-2.5 px-5 h-16 border-b border-border">
+        <div className="flex h-7 w-7 items-center justify-center rounded-sm border border-primary/40 bg-primary/10 text-primary">
+          <ShieldCheck className="h-4 w-4" />
+        </div>
+        <div className="leading-tight">
+          <p className="text-sm font-semibold">Key Management</p>
+          <p className="text-[11px] text-muted-foreground font-data">console</p>
+        </div>
       </div>
-      <nav className="flex-1 px-3 py-4 space-y-1">
+      <nav className="flex-1 px-2 py-4 space-y-0.5">
         {NAV_ITEMS.map((item) => {
           const active = pathname === item.href;
           const Icon = item.icon;
@@ -53,10 +58,10 @@ export function Sidebar() {
               href={item.href}
               onClick={() => setOpen(false)}
               className={cn(
-                'flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors',
+                'flex items-center gap-3 border-l-2 px-3.5 py-2 text-sm font-medium transition-colors',
                 active
-                  ? 'bg-primary/15 text-primary'
-                  : 'text-muted-foreground hover:bg-secondary hover:text-foreground'
+                  ? 'border-primary bg-primary/[0.07] text-primary'
+                  : 'border-transparent text-muted-foreground hover:border-border hover:bg-secondary/60 hover:text-foreground'
               )}
             >
               <Icon className="h-4 w-4" />
@@ -68,7 +73,7 @@ export function Sidebar() {
       <div className="p-3 border-t border-border">
         <button
           onClick={handleLogout}
-          className="flex w-full items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-secondary hover:text-foreground transition-colors"
+          className="flex w-full items-center gap-3 rounded-sm px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-secondary hover:text-foreground transition-colors"
         >
           <LogOut className="h-4 w-4" />
           Logout
