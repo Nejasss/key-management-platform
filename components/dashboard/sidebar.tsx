@@ -98,8 +98,11 @@ export function Sidebar() {
       {/* Mobile drawer */}
       {open && (
         <div className="md:hidden fixed inset-0 z-50 flex">
-          <div className="absolute inset-0 bg-black/60" onClick={() => setOpen(false)} />
-          <aside className="relative w-64 bg-card/95 backdrop-blur-xl border-r border-white/5">
+          <div
+            className="absolute inset-0 bg-black/60 animate-in fade-in duration-200"
+            onClick={() => setOpen(false)}
+          />
+          <aside className="relative w-64 bg-card/95 backdrop-blur-xl border-r border-white/5 animate-in slide-in-from-left duration-300 ease-out">
             <button onClick={() => setOpen(false)} className="absolute right-3 top-3">
               <X className="h-5 w-5" />
             </button>

@@ -45,7 +45,7 @@ function LoginForm() {
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4">
-      <div className="w-full max-w-sm">
+      <div className="w-full max-w-sm animate-in fade-in slide-in-from-bottom-4 duration-500 ease-out">
         <div className="flex flex-col items-center mb-6">
           <div className="h-12 w-12 rounded-2xl bg-primary/15 flex items-center justify-center mb-3 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.1)]">
             <ShieldCheck className="h-5 w-5 text-primary" />

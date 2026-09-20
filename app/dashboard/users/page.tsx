@@ -61,7 +61,7 @@ export default function UsersPage() {
                 ))}
               {!loading &&
                 rows.map((u) => (
-                  <tr key={u.id} className="border-b border-white/5 last:border-0 hover:bg-secondary/30">
+                  <tr key={u.id} className="stagger-row border-b border-white/5 last:border-0 hover:bg-secondary/30">
                     <td className="p-3 font-medium">{u.username}</td>
                     <td className="p-3 text-muted-foreground font-data text-xs">{u.email}</td>
                     <td className="p-3">

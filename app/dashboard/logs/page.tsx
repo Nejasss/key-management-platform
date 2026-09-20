@@ -66,7 +66,7 @@ export default function LogsPage() {
                 ))}
               {!loading &&
                 rows.map((log) => (
-                  <tr key={log.id} className="border-b border-white/5 last:border-0 hover:bg-secondary/30">
+                  <tr key={log.id} className="stagger-row border-b border-white/5 last:border-0 hover:bg-secondary/30">
                     <td className="p-3 whitespace-nowrap text-muted-foreground">{formatDate(log.createdAt)}</td>
                     <td className="p-3 font-medium capitalize">{log.action.replace(/_/g, ' ')}</td>
                     <td className="p-3 text-muted-foreground">{log.userEmail ?? '—'}</td>

@@ -14,6 +14,7 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { formatDate, cn } from '@/lib/utils';
+import { useCountUp } from '@/lib/hooks/use-count-up';
 import {
   ResponsiveContainer,
   LineChart,
@@ -54,6 +55,44 @@ const READOUTS = [
   { key: 'verificationsToday', label: 'Verified today', icon: Activity, text: 'text-signal-pink', chip: 'bg-signal-pink/10' },
 ] as const;
 
+function StatCard({
+  label,
+  value,
+  icon: Icon,
+  text,
+  chip,
+  loading,
+  index,
+}: {
+  label: string;
+  value: number;
+  icon: React.ComponentType<{ className?: string }>;
+  text: string;
+  chip: string;
+  loading: boolean;
+  index: number;
+}) {
+  const animated = useCountUp(value);
+  return (
+    <Card
+      className="stagger-row p-4 flex items-center gap-3 transition-transform duration-200 hover:scale-[1.02] hover:-translate-y-0.5"
+      style={{ animationDelay: `${index * 40}ms` }}
+    >
+      <div className={cn('h-10 w-10 rounded-xl flex items-center justify-center shrink-0', chip, text)}>
+        <Icon className="h-4.5 w-4.5" />
+      </div>
+      <div className="min-w-0">
+        <p className="text-xs text-muted-foreground truncate">{label}</p>
+        {loading ? (
+          <Skeleton className="h-6 w-12 mt-1" />
+        ) : (
+          <p className="font-data text-xl font-medium mt-0.5 tabular-nums">{animated}</p>
+        )}
+      </div>
+    </Card>
+  );
+}
+
 export default function DashboardPage() {
   const [stats, setStats] = useState<Stats | null>(null);
   const [loading, setLoading] = useState(true);
@@ -83,24 +122,18 @@ export default function DashboardPage() {
       </div>
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-        {READOUTS.map((r) => {
-          const Icon = r.icon;
-          return (
-            <Card key={r.key} className="p-4 flex items-center gap-3">
-              <div className={cn('h-10 w-10 rounded-xl flex items-center justify-center shrink-0', r.chip, r.text)}>
-                <Icon className="h-4.5 w-4.5" />
-              </div>
-              <div className="min-w-0">
-                <p className="text-xs text-muted-foreground truncate">{r.label}</p>
-                {loading ? (
-                  <Skeleton className="h-6 w-12 mt-1" />
-                ) : (
-                  <p className="font-data text-xl font-medium mt-0.5">{stats?.[r.key] ?? 0}</p>
-                )}
-              </div>
-            </Card>
-          );
-        })}
+        {READOUTS.map((r, i) => (
+          <StatCard
+            key={r.key}
+            label={r.label}
+            value={stats?.[r.key] ?? 0}
+            icon={r.icon}
+            text={r.text}
+            chip={r.chip}
+            loading={loading}
+            index={i}
+          />
+        ))}
       </div>
 
       <div className="grid lg:grid-cols-3 gap-4">
@@ -178,7 +211,7 @@ export default function DashboardPage() {
           )}
           {!loading &&
             stats?.recentActivity.map((log) => (
-              <div key={log.id} className="flex items-center justify-between text-sm py-2.5">
+              <div key={log.id} className="stagger-row flex items-center justify-between text-sm py-2.5">
                 <div>
                   <span className="font-medium capitalize">{log.action.replace(/_/g, ' ')}</span>
                   {log.userEmail && <span className="text-muted-foreground font-data text-xs"> · {log.userEmail}</span>}

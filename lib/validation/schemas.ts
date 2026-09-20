@@ -29,6 +29,15 @@ export const updateLicenseSchema = z.object({
   note: z.string().max(500).optional(),
 });
 
+export const extendLicenseSchema = z.object({
+  days: z.coerce.number().int().min(1).max(3650),
+  // If true, extend from today regardless of current expiry (useful for
+  // an already-expired key). If false (default), extend from the
+  // existing expiresAt when it's still in the future, otherwise from
+  // today — i.e. "add N days to whatever time is left".
+  fromToday: z.boolean().optional().default(false),
+});
+
 export const licenseListQuerySchema = z.object({
   search: z.string().max(255).optional(),
   status: z.enum(['active', 'expired', 'revoked', 'unused', 'all']).optional().default('all'),

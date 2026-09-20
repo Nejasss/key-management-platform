@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useState } from 'react';
-import { Search, Copy, Eye, Ban, Trash2, RotateCcw, ChevronLeft, ChevronRight, Download } from 'lucide-react';
+import { Search, Copy, Eye, Ban, Trash2, RotateCcw, ChevronLeft, ChevronRight, Download, CalendarPlus } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -161,7 +161,7 @@ export default function KeysPage() {
                 ))}
               {!loading &&
                 rows.map((row) => (
-                  <tr key={row.id} className="border-b border-white/5 last:border-0 hover:bg-secondary/30">
+                  <tr key={row.id} className="stagger-row border-b border-white/5 last:border-0 hover:bg-secondary/30">
                     <td className="p-3 font-data text-xs whitespace-nowrap">
                       <button onClick={() => copyKey(row.key)} className="flex items-center gap-1.5 hover:text-primary">
                         {row.key} <Copy className="h-3 w-3" />
@@ -189,6 +189,9 @@ export default function KeysPage() {
                       <div className="flex items-center justify-end gap-1">
                         <Button variant="ghost" size="icon" title="View devices" onClick={() => openDetail(row.id)}>
                           <Eye className="h-4 w-4" />
+                        </Button>
+                        <Button variant="ghost" size="icon" title="Extend expiry" onClick={() => openDetail(row.id)}>
+                          <CalendarPlus className="h-4 w-4" />
                         </Button>
                         <Button variant="ghost" size="icon" title="Reset all devices" onClick={() => handleAction(row.id, 'reset-device')}>
                           <RotateCcw className="h-4 w-4" />
