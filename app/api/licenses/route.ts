@@ -1,6 +1,6 @@
 import { NextRequest } from 'next/server';
 import { db, schema } from '@/db';
-import { and, desc, asc, eq, ilike, or, sql } from 'drizzle-orm';
+import { and, desc, asc, eq, ilike, or, sql, inArray } from 'drizzle-orm';
 import { requireUser } from '@/lib/auth/session';
 import { apiError, apiSuccess } from '@/lib/security/api-response';
 import { licenseListQuerySchema, generateKeySchema } from '@/lib/validation/schemas';
@@ -48,10 +48,6 @@ export async function GET(req: NextRequest) {
         lastVerifiedAt: schema.licenses.lastVerifiedAt,
         note: schema.licenses.note,
         createdBy: schema.licenses.createdBy,
-        deviceCount: sql<number>`(
-          select count(*)::int from ${schema.licenseDevices}
-          where ${schema.licenseDevices.licenseId} = ${schema.licenses.id}
-        )`,
       })
       .from(schema.licenses)
       .where(where)
@@ -61,8 +57,31 @@ export async function GET(req: NextRequest) {
     db.select({ count: sql<number>`count(*)::int` }).from(schema.licenses).where(where),
   ]);
 
+  // Fetch device counts for just the licenses on this page via a
+  // separate grouped aggregate query, then merge in JS. This avoids the
+  // correlated-subquery-in-select-list pattern, which under-counted
+  // (always returned 0) with the Neon HTTP driver.
+  let deviceCounts = new Map<string, number>();
+  if (rows.length > 0) {
+    const counts = await db
+      .select({
+        licenseId: schema.licenseDevices.licenseId,
+        count: sql<number>`count(*)::int`,
+      })
+      .from(schema.licenseDevices)
+      .where(inArray(schema.licenseDevices.licenseId, rows.map((r) => r.id)))
+      .groupBy(schema.licenseDevices.licenseId);
+
+    deviceCounts = new Map(counts.map((c) => [c.licenseId, Number(c.count)]));
+  }
+
+  const rowsWithDeviceCount = rows.map((row) => ({
+    ...row,
+    deviceCount: deviceCounts.get(row.id) ?? 0,
+  }));
+
   return apiSuccess({
-    data: rows,
+    data: rowsWithDeviceCount,
     pagination: {
       page,
       pageSize,
