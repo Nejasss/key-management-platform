@@ -44,13 +44,13 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
           <div
             key={t.id}
             className={cn(
-              'flex items-start gap-3 rounded-lg border p-4 shadow-lg bg-card animate-in slide-in-from-bottom-2',
-              t.variant === 'success' && 'border-success/40',
-              t.variant === 'error' && 'border-destructive/40'
+              'glass relative flex items-start gap-3 rounded-2xl p-4 pl-4 animate-in slide-in-from-bottom-2 overflow-hidden',
+              t.variant === 'success' && 'before:absolute before:inset-y-0 before:left-0 before:w-1 before:bg-signal-success',
+              t.variant === 'error' && 'before:absolute before:inset-y-0 before:left-0 before:w-1 before:bg-signal-danger'
             )}
           >
-            {t.variant === 'success' && <CheckCircle2 className="h-5 w-5 text-success shrink-0" />}
-            {t.variant === 'error' && <XCircle className="h-5 w-5 text-destructive shrink-0" />}
+            {t.variant === 'success' && <CheckCircle2 className="h-5 w-5 text-signal-success shrink-0" />}
+            {t.variant === 'error' && <XCircle className="h-5 w-5 text-signal-danger shrink-0" />}
             <div className="flex-1 min-w-0">
               <p className="text-sm font-medium">{t.title}</p>
               {t.description && <p className="text-xs text-muted-foreground mt-0.5">{t.description}</p>}

@@ -41,7 +41,7 @@ export default function UsersPage() {
         <div className="overflow-x-auto scrollbar-thin">
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-border text-left text-muted-foreground">
+              <tr className="border-b border-white/5 text-left text-muted-foreground">
                 <th className="p-3 font-medium">Username</th>
                 <th className="p-3 font-medium">Email</th>
                 <th className="p-3 font-medium">Role</th>
@@ -53,7 +53,7 @@ export default function UsersPage() {
             <tbody>
               {loading &&
                 Array.from({ length: 4 }).map((_, i) => (
-                  <tr key={i} className="border-b border-border">
+                  <tr key={i} className="border-b border-white/5">
                     <td className="p-3" colSpan={6}>
                       <Skeleton className="h-6 w-full" />
                     </td>
@@ -61,7 +61,7 @@ export default function UsersPage() {
                 ))}
               {!loading &&
                 rows.map((u) => (
-                  <tr key={u.id} className="border-b border-border last:border-0 hover:bg-secondary/30">
+                  <tr key={u.id} className="border-b border-white/5 last:border-0 hover:bg-secondary/30">
                     <td className="p-3 font-medium">{u.username}</td>
                     <td className="p-3 text-muted-foreground font-data text-xs">{u.email}</td>
                     <td className="p-3">

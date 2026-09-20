@@ -44,6 +44,10 @@ const config: Config = {
           warning: 'hsl(var(--signal-warning))',
           danger: 'hsl(var(--signal-danger))',
           idle: 'hsl(var(--signal-idle))',
+          info: 'hsl(var(--signal-info))',
+          violet: 'hsl(var(--signal-violet))',
+          teal: 'hsl(var(--signal-teal))',
+          pink: 'hsl(var(--signal-pink))',
         },
         // kept for backward compatibility with earlier components
         success: 'hsl(var(--signal-success))',

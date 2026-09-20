@@ -32,7 +32,7 @@ const DialogContent = React.forwardRef<
     <DialogPrimitive.Content
       ref={ref}
       className={cn(
-        'fixed left-1/2 top-1/2 z-50 w-[92vw] max-w-2xl -translate-x-1/2 -translate-y-1/2 rounded-lg border border-border bg-card p-0 shadow-lg max-h-[85vh] overflow-hidden flex flex-col data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95',
+        'glass fixed left-1/2 top-1/2 z-50 w-[92vw] max-w-2xl -translate-x-1/2 -translate-y-1/2 rounded-2xl p-0 max-h-[85vh] overflow-hidden flex flex-col data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95',
         className
       )}
       {...props}
@@ -50,7 +50,7 @@ DialogContent.displayName = DialogPrimitive.Content.displayName;
 function DialogHeader({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
   return (
     <div
-      className={cn('flex flex-col space-y-1 px-5 pt-5 pb-4 border-b border-border shrink-0', className)}
+      className={cn('flex flex-col space-y-1 px-5 pt-5 pb-4 border-b border-white/5 shrink-0', className)}
       {...props}
     />
   );
@@ -63,7 +63,7 @@ function DialogBody({ className, ...props }: React.HTMLAttributes<HTMLDivElement
 function DialogFooter({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
   return (
     <div
-      className={cn('flex items-center justify-end gap-2 px-5 py-4 border-t border-border shrink-0', className)}
+      className={cn('flex items-center justify-end gap-2 px-5 py-4 border-t border-white/5 shrink-0', className)}
       {...props}
     />
   );

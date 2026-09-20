@@ -122,7 +122,7 @@ export function KeyDetailDialog({
             <>
               <div className="flex flex-wrap items-center gap-2">
                 <Badge status={data.status}>{data.status}</Badge>
-                <span className="inline-flex items-center gap-1.5 rounded-sm border border-border bg-secondary/50 px-2.5 py-0.5 text-xs font-medium font-data">
+                <span className="inline-flex items-center gap-1.5 rounded-lg border border-white/10 bg-white/[0.04] px-2.5 py-0.5 text-xs font-medium font-data">
                   <Smartphone className="h-3 w-3" />
                   {slotsLabel} devices used
                 </span>
@@ -142,7 +142,7 @@ export function KeyDetailDialog({
                   {data.devices.map((device) => (
                     <div
                       key={device.id}
-                      className="rounded-md border border-border p-3 flex items-start justify-between gap-3"
+                      className="rounded-xl border border-white/5 bg-white/[0.02] p-3 flex items-start justify-between gap-3"
                     >
                       <div className="min-w-0 space-y-1.5">
                         <button
@@ -188,7 +188,7 @@ export function KeyDetailDialog({
               )}
 
               {data.note && (
-                <div className="rounded-md bg-secondary/40 border border-border p-3 text-xs text-muted-foreground">
+                <div className="rounded-xl bg-white/[0.03] border border-white/5 p-3 text-xs text-muted-foreground">
                   <span className="font-medium text-foreground">Note: </span>
                   {data.note}
                 </div>

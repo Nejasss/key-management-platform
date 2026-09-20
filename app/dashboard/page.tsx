@@ -1,6 +1,16 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import {
+  KeyRound,
+  ShieldCheck,
+  ShieldAlert,
+  ShieldX,
+  Smartphone,
+  Users,
+  TrendingUp,
+  Activity,
+} from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { formatDate, cn } from '@/lib/utils';
@@ -31,15 +41,17 @@ interface Stats {
   dailyVerifications: { date: string; count: number }[];
 }
 
+// Each metric gets its own hue — variety on purpose, kept soft rather
+// than saturated, so the dashboard doesn't read as one flat color.
 const READOUTS = [
-  { key: 'totalKeys', label: 'total keys', tone: 'text-foreground' },
-  { key: 'activeKeys', label: 'active', tone: 'text-signal-success' },
-  { key: 'expiredKeys', label: 'expired', tone: 'text-signal-warning' },
-  { key: 'revokedKeys', label: 'revoked', tone: 'text-signal-danger' },
-  { key: 'usedDevices', label: 'devices bound', tone: 'text-foreground' },
-  { key: 'totalUsers', label: 'users', tone: 'text-foreground' },
-  { key: 'keysToday', label: 'generated today', tone: 'text-primary' },
-  { key: 'verificationsToday', label: 'verified today', tone: 'text-primary' },
+  { key: 'totalKeys', label: 'Total keys', icon: KeyRound, text: 'text-primary', chip: 'bg-primary/10' },
+  { key: 'activeKeys', label: 'Active', icon: ShieldCheck, text: 'text-signal-success', chip: 'bg-signal-success/10' },
+  { key: 'expiredKeys', label: 'Expired', icon: ShieldAlert, text: 'text-signal-warning', chip: 'bg-signal-warning/10' },
+  { key: 'revokedKeys', label: 'Revoked', icon: ShieldX, text: 'text-signal-danger', chip: 'bg-signal-danger/10' },
+  { key: 'usedDevices', label: 'Devices bound', icon: Smartphone, text: 'text-signal-info', chip: 'bg-signal-info/10' },
+  { key: 'totalUsers', label: 'Users', icon: Users, text: 'text-signal-violet', chip: 'bg-signal-violet/10' },
+  { key: 'keysToday', label: 'Generated today', icon: TrendingUp, text: 'text-signal-teal', chip: 'bg-signal-teal/10' },
+  { key: 'verificationsToday', label: 'Verified today', icon: Activity, text: 'text-signal-pink', chip: 'bg-signal-pink/10' },
 ] as const;
 
 export default function DashboardPage() {
@@ -70,24 +82,26 @@ export default function DashboardPage() {
         <p className="text-sm text-muted-foreground">Overview of your license key system</p>
       </div>
 
-      {/* Readout strip — one bordered panel, hairline-divided cells,
-          mono numerals. Replaces a grid of identical icon cards. */}
-      <Card className="overflow-hidden">
-        <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 divide-x divide-y divide-border lg:divide-y-0">
-          {READOUTS.map((r) => (
-            <div key={r.key} className="p-4">
-              <p className="text-xs text-muted-foreground">{r.label}</p>
-              {loading ? (
-                <Skeleton className="h-6 w-12 mt-1.5" />
-              ) : (
-                <p className={cn('font-data text-2xl font-medium mt-0.5', r.tone)}>
-                  {stats?.[r.key] ?? 0}
-                </p>
-              )}
-            </div>
-          ))}
-        </div>
-      </Card>
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+        {READOUTS.map((r) => {
+          const Icon = r.icon;
+          return (
+            <Card key={r.key} className="p-4 flex items-center gap-3">
+              <div className={cn('h-10 w-10 rounded-xl flex items-center justify-center shrink-0', r.chip, r.text)}>
+                <Icon className="h-4.5 w-4.5" />
+              </div>
+              <div className="min-w-0">
+                <p className="text-xs text-muted-foreground truncate">{r.label}</p>
+                {loading ? (
+                  <Skeleton className="h-6 w-12 mt-1" />
+                ) : (
+                  <p className="font-data text-xl font-medium mt-0.5">{stats?.[r.key] ?? 0}</p>
+                )}
+              </div>
+            </Card>
+          );
+        })}
+      </div>
 
       <div className="grid lg:grid-cols-3 gap-4">
         <Card className="lg:col-span-2">
@@ -111,12 +125,12 @@ export default function DashboardPage() {
                     contentStyle={{
                       backgroundColor: 'hsl(var(--card))',
                       border: '1px solid hsl(var(--border))',
-                      borderRadius: 6,
+                      borderRadius: 10,
                       fontSize: 12,
                     }}
                   />
-                  <Line type="monotone" dataKey="generated" stroke="hsl(var(--primary))" strokeWidth={2} dot={false} name="Generated" />
-                  <Line type="monotone" dataKey="verified" stroke="hsl(var(--signal-success))" strokeWidth={2} dot={false} name="Verified" />
+                  <Line type="monotone" dataKey="generated" stroke="hsl(var(--signal-teal))" strokeWidth={2.5} dot={false} name="Generated" />
+                  <Line type="monotone" dataKey="verified" stroke="hsl(var(--signal-pink))" strokeWidth={2.5} dot={false} name="Verified" />
                 </LineChart>
               </ResponsiveContainer>
             )}
@@ -142,7 +156,7 @@ export default function DashboardPage() {
                     contentStyle={{
                       backgroundColor: 'hsl(var(--card))',
                       border: '1px solid hsl(var(--border))',
-                      borderRadius: 6,
+                      borderRadius: 10,
                       fontSize: 12,
                     }}
                   />
@@ -157,7 +171,7 @@ export default function DashboardPage() {
         <CardHeader>
           <CardTitle>Recent activity</CardTitle>
         </CardHeader>
-        <CardContent className="space-y-0 divide-y divide-border">
+        <CardContent className="space-y-0 divide-y divide-white/5">
           {loading && Array.from({ length: 5 }).map((_, i) => <Skeleton key={i} className="h-8 w-full my-2" />)}
           {!loading && stats?.recentActivity.length === 0 && (
             <p className="text-sm text-muted-foreground py-4 text-center">No activity yet.</p>

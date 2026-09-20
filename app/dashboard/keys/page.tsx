@@ -140,7 +140,7 @@ export default function KeysPage() {
         <div className="overflow-x-auto scrollbar-thin">
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-border text-left text-muted-foreground">
+              <tr className="border-b border-white/5 text-left text-muted-foreground">
                 <th className="p-3 font-medium">Key</th>
                 <th className="p-3 font-medium">Status</th>
                 <th className="p-3 font-medium">Created</th>
@@ -153,7 +153,7 @@ export default function KeysPage() {
             <tbody>
               {loading &&
                 Array.from({ length: 6 }).map((_, i) => (
-                  <tr key={i} className="border-b border-border">
+                  <tr key={i} className="border-b border-white/5">
                     <td className="p-3" colSpan={7}>
                       <Skeleton className="h-6 w-full" />
                     </td>
@@ -161,7 +161,7 @@ export default function KeysPage() {
                 ))}
               {!loading &&
                 rows.map((row) => (
-                  <tr key={row.id} className="border-b border-border last:border-0 hover:bg-secondary/30">
+                  <tr key={row.id} className="border-b border-white/5 last:border-0 hover:bg-secondary/30">
                     <td className="p-3 font-data text-xs whitespace-nowrap">
                       <button onClick={() => copyKey(row.key)} className="flex items-center gap-1.5 hover:text-primary">
                         {row.key} <Copy className="h-3 w-3" />

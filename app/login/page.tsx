@@ -47,7 +47,7 @@ function LoginForm() {
     <div className="min-h-screen flex items-center justify-center p-4">
       <div className="w-full max-w-sm">
         <div className="flex flex-col items-center mb-6">
-          <div className="h-11 w-11 rounded-sm bg-primary/10 border border-primary/40 flex items-center justify-center mb-3">
+          <div className="h-12 w-12 rounded-2xl bg-primary/15 flex items-center justify-center mb-3 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.1)]">
             <ShieldCheck className="h-5 w-5 text-primary" />
           </div>
           <h1 className="text-lg font-semibold">Key Management Platform</h1>
@@ -58,7 +58,7 @@ function LoginForm() {
           <CardContent className="pt-6">
             <form onSubmit={handleSubmit} className="space-y-4">
               {error && (
-                <div className="rounded-md border border-destructive/40 bg-destructive/10 px-3 py-2 text-sm text-destructive">
+                <div className="rounded-xl border border-signal-danger/30 bg-signal-danger/10 px-3 py-2 text-sm text-signal-danger">
                   {error}
                 </div>
               )}

@@ -2,7 +2,7 @@ import { Badge } from '@/components/ui/badge';
 
 export function Navbar({ user }: { user: { username: string; email: string; role: string } }) {
   return (
-    <header className="h-16 border-b border-border flex items-center justify-between px-4 md:px-6 gap-3">
+    <header className="h-16 border-b border-white/5 bg-card/20 backdrop-blur-xl flex items-center justify-between px-4 md:px-6 gap-3">
       <div className="signal-dot signal-dot--live hidden sm:flex items-center gap-2 text-signal-success">
         <span className="text-xs font-medium text-muted-foreground font-data">System nominal</span>
       </div>

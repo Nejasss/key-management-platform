@@ -188,11 +188,11 @@ export default function GenerateKeyPage() {
             </div>
           </CardHeader>
           <CardContent>
-            <div className="max-h-80 overflow-y-auto scrollbar-thin rounded-md border border-border">
+            <div className="max-h-80 overflow-y-auto scrollbar-thin rounded-xl border border-white/5">
               <table className="w-full text-sm">
                 <tbody>
                   {generated.map((g) => (
-                    <tr key={g.id} className="border-b border-border last:border-0">
+                    <tr key={g.id} className="border-b border-white/5 last:border-0">
                       <td className="p-2 font-data text-xs">{g.key}</td>
                       <td className="p-2 text-muted-foreground text-xs">{g.status}</td>
                     </tr>

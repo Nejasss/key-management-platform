@@ -47,7 +47,7 @@ export default function LogsPage() {
         <div className="overflow-x-auto scrollbar-thin">
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-border text-left text-muted-foreground">
+              <tr className="border-b border-white/5 text-left text-muted-foreground">
                 <th className="p-3 font-medium">Timestamp</th>
                 <th className="p-3 font-medium">Action</th>
                 <th className="p-3 font-medium">User</th>
@@ -58,7 +58,7 @@ export default function LogsPage() {
             <tbody>
               {loading &&
                 Array.from({ length: 8 }).map((_, i) => (
-                  <tr key={i} className="border-b border-border">
+                  <tr key={i} className="border-b border-white/5">
                     <td className="p-3" colSpan={5}>
                       <Skeleton className="h-6 w-full" />
                     </td>
@@ -66,7 +66,7 @@ export default function LogsPage() {
                 ))}
               {!loading &&
                 rows.map((log) => (
-                  <tr key={log.id} className="border-b border-border last:border-0 hover:bg-secondary/30">
+                  <tr key={log.id} className="border-b border-white/5 last:border-0 hover:bg-secondary/30">
                     <td className="p-3 whitespace-nowrap text-muted-foreground">{formatDate(log.createdAt)}</td>
                     <td className="p-3 font-medium capitalize">{log.action.replace(/_/g, ' ')}</td>
                     <td className="p-3 text-muted-foreground">{log.userEmail ?? '—'}</td>
