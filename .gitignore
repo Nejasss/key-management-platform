@@ -5,6 +5,3 @@ node_modules/
 .vercel
 *.log
 .DS_Store
-drizzle/meta/
-.env
-.env.local

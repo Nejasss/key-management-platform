@@ -53,7 +53,6 @@ Fill in `.env`:
 | `APP_URL`         | Public URL of your deployment (`http://localhost:3000` for local dev)  |
 | `ADMIN_EMAIL`     | Email for the admin account created by the seed script                 |
 | `ADMIN_PASSWORD`  | Password for the admin account — only read once at seed time, hashed immediately, never logged |
-| `CRON_SECRET` | Random secret sama dengan AUTH_SECRET - `openssl rand -base64 32` |
 
 `.env` is already in `.gitignore` — **never commit it.**
 

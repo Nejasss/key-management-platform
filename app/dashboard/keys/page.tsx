@@ -9,7 +9,8 @@ import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
 import { EmptyState } from '@/components/ui/empty-state';
 import { useToast } from '@/components/ui/toaster';
-import { formatDate } from '@/lib/utils';
+import { formatDate, cn } from '@/lib/utils';
+import { KeyDetailDialog } from '@/components/dashboard/key-detail-dialog';
 
 interface LicenseRow {
   id: string;
@@ -17,6 +18,7 @@ interface LicenseRow {
   status: string;
   prefix: string;
   maxDevices: number;
+  deviceCount: number;
   expiresAt: string | null;
   createdAt: string;
   lastVerifiedAt: string | null;
@@ -31,6 +33,8 @@ export default function KeysPage() {
   const [status, setStatus] = useState('all');
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [detailId, setDetailId] = useState<string | null>(null);
+  const [detailOpen, setDetailOpen] = useState(false);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -68,6 +72,11 @@ export default function KeysPage() {
   function copyKey(key: string) {
     navigator.clipboard.writeText(key);
     toast({ title: 'Copied', description: key, variant: 'success' });
+  }
+
+  function openDetail(id: string) {
+    setDetailId(id);
+    setDetailOpen(true);
   }
 
   function exportCsv() {
@@ -163,11 +172,25 @@ export default function KeysPage() {
                     </td>
                     <td className="p-3 text-muted-foreground whitespace-nowrap">{formatDate(row.createdAt)}</td>
                     <td className="p-3 text-muted-foreground whitespace-nowrap">{formatDate(row.expiresAt)}</td>
-                    <td className="p-3 text-muted-foreground">{row.maxDevices === -1 ? '∞' : row.maxDevices}</td>
+                    <td className="p-3">
+                      <button
+                        onClick={() => openDetail(row.id)}
+                        className={cn(
+                          'text-xs font-medium hover:text-primary hover:underline underline-offset-2',
+                          row.maxDevices !== -1 && row.deviceCount >= row.maxDevices && 'text-warning'
+                        )}
+                        title="View bound devices"
+                      >
+                        {row.deviceCount} / {row.maxDevices === -1 ? '∞' : row.maxDevices}
+                      </button>
+                    </td>
                     <td className="p-3 text-muted-foreground whitespace-nowrap">{formatDate(row.lastVerifiedAt)}</td>
                     <td className="p-3">
                       <div className="flex items-center justify-end gap-1">
-                        <Button variant="ghost" size="icon" title="Reset device" onClick={() => handleAction(row.id, 'reset-device')}>
+                        <Button variant="ghost" size="icon" title="View devices" onClick={() => openDetail(row.id)}>
+                          <Eye className="h-4 w-4" />
+                        </Button>
+                        <Button variant="ghost" size="icon" title="Reset all devices" onClick={() => handleAction(row.id, 'reset-device')}>
                           <RotateCcw className="h-4 w-4" />
                         </Button>
                         <Button
@@ -207,6 +230,13 @@ export default function KeysPage() {
           </Button>
         </div>
       </div>
+
+      <KeyDetailDialog
+        licenseId={detailId}
+        open={detailOpen}
+        onOpenChange={setDetailOpen}
+        onChanged={load}
+      />
     </div>
   );
 }

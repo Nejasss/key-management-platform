@@ -36,7 +36,23 @@ export async function GET(req: NextRequest) {
 
   const [rows, countResult] = await Promise.all([
     db
-      .select()
+      .select({
+        id: schema.licenses.id,
+        key: schema.licenses.key,
+        status: schema.licenses.status,
+        prefix: schema.licenses.prefix,
+        maxDevices: schema.licenses.maxDevices,
+        expiresAt: schema.licenses.expiresAt,
+        createdAt: schema.licenses.createdAt,
+        updatedAt: schema.licenses.updatedAt,
+        lastVerifiedAt: schema.licenses.lastVerifiedAt,
+        note: schema.licenses.note,
+        createdBy: schema.licenses.createdBy,
+        deviceCount: sql<number>`(
+          select count(*)::int from ${schema.licenseDevices}
+          where ${schema.licenseDevices.licenseId} = ${schema.licenses.id}
+        )`,
+      })
       .from(schema.licenses)
       .where(where)
       .orderBy(orderFn(sortColumn))
