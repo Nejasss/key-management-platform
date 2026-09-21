@@ -136,7 +136,27 @@ valid for a given device.
 **Endpoint:** `POST /api/verify`
 **Auth:** none required (public), but rate-limited (30 requests/minute per IP by default).
 
-### Example request
+### Plain mode vs encrypted mode
+
+By default (no `API_ENCRYPTION_KEY` / `API_HMAC_SECRET` set), the endpoint speaks plain
+JSON, shown below — fine for local development.
+
+Once you set **both** `API_ENCRYPTION_KEY` and `API_HMAC_SECRET` (see `.env.example`), the
+endpoint *requires* every request and response to be wrapped in an AES-256-GCM encrypted,
+HMAC-SHA256 signed envelope instead. This matters for a license/anti-piracy endpoint
+specifically because plain HTTPS only protects the wire — it does nothing against a proxy
+tool (Fiddler, Charles, Frida) installed on the *client's own device*, which can still read
+or rewrite `valid: false` into `valid: true` before your app ever sees it. The encrypted
+envelope stops that: the client verifies the response's HMAC signature before decrypting or
+trusting anything in it, and a forged response won't have a valid signature since the
+attacker doesn't have `API_HMAC_SECRET`.
+
+Full wire protocol, key-management notes, and ready-to-use client code for Node.js, Python,
+and Kotlin/Android are in **`examples/verify-client/`** (see `NOTES.md` there — including
+guidance for Roblox/Lua clients, which need a slightly different approach since Luau has no
+built-in crypto primitives).
+
+### Example request (plain mode)
 
 ```bash
 curl -X POST https://your-app.vercel.app/api/verify \
@@ -146,6 +166,17 @@ curl -X POST https://your-app.vercel.app/api/verify \
     "device_id": "device-123456"
   }'
 ```
+
+### Example request (encrypted mode)
+
+```bash
+API_ENCRYPTION_KEY=... API_HMAC_SECRET=... \
+  node examples/verify-client/verify-client.js \
+  https://your-app.vercel.app CAINTXS-AB12CD-EF34GH-IJ56KL device-123456
+```
+
+(Encrypted mode isn't practical to demo with a bare `curl` command since the body has to be
+encrypted and the request signed first — use the reference client instead.)
 
 ### Example success response
 
@@ -160,6 +191,9 @@ curl -X POST https://your-app.vercel.app/api/verify \
 }
 ```
 
+In encrypted mode, this same object is what you get back *after* verifying the response
+signature and decrypting — the raw HTTP response body is `{"iv":"...","tag":"...","data":"..."}`.
+
 ### Example failure response
 
 ```json
@@ -171,18 +205,22 @@ curl -X POST https://your-app.vercel.app/api/verify \
 
 ### Verification flow
 
-1. Validate the JSON body with Zod.
-2. Look up the key in the database.
-3. Not found → invalid.
-4. Revoked → invalid.
-5. Expired → invalid (and the row is auto-transitioned to `status: expired`).
-6. Active/unused:
+1. (Encrypted mode only) Verify `X-Signature`/`X-Timestamp`, reject stale or replayed
+   requests, then decrypt the body.
+2. Validate the payload with Zod.
+3. Look up the key in the database.
+4. Not found → invalid.
+5. Revoked → invalid.
+6. Expired → invalid (and the row is auto-transitioned to `status: expired`).
+7. Active/unused:
    - Device already bound → valid.
    - Device not bound and a slot is free → bind it, valid.
    - No free slot → invalid (`device_limit_reached`).
-7. `last_verified_at` is updated.
-8. An activity log row is written.
-9. The response never includes passwords, hashes, session tokens, or environment variables.
+8. `last_verified_at` is updated.
+9. An activity log row is written.
+10. (Encrypted mode only) The response is encrypted and signed before being sent.
+11. The response never includes passwords, hashes, session tokens, or environment variables
+    — in either mode.
 
 ---
 
@@ -307,6 +345,11 @@ time you're rendering a key, ID, IP, or timestamp.
   `Permissions-Policy`) are set globally in `next.config.mjs`.
 - No secrets are hardcoded anywhere in source — everything sensitive comes from environment
   variables, and the admin password is supplied only at seed time via `ADMIN_PASSWORD`.
+- `/api/verify` supports an optional encrypted+signed transport (AES-256-GCM + HMAC-SHA256,
+  `lib/security/crypto.ts`) on top of HTTPS, for when the client is untrusted (e.g. a
+  distributed app where someone could run a proxy tool on their own device). See §10 and
+  `examples/verify-client/NOTES.md`. Off by default (plain JSON) until you set
+  `API_ENCRYPTION_KEY` + `API_HMAC_SECRET`.
 
 ### Scaling the rate limiter
 
@@ -314,6 +357,12 @@ The included rate limiter is in-memory, which is best-effort per serverless inst
 strict, globally-consistent limits across all instances, swap `lib/rate-limit/index.ts` for
 Vercel KV or Upstash Redis — the function signature is intentionally simple so this is a
 drop-in change.
+
+### Scaling replay protection
+
+Same caveat as the rate limiter: `checkAndRecordReplay()` in `lib/security/crypto.ts` is an
+in-memory Set, best-effort per instance. For strict cross-instance replay protection when
+running encrypted mode at scale, back it with Vercel KV / Upstash Redis instead.
 
 ---
 
